@@ -2,7 +2,7 @@
 
 ## 公開URL
 
-https://新しいユーザー名.github.io/entame-review-app/
+https://aki-suya.github.io/entame-review-app/
 
 ## 概要
 
