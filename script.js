@@ -7,6 +7,7 @@ const addButton = document.getElementById("addButton");
 const cancelEditButton = document.getElementById("cancelEditButton");
 const reviewList = document.getElementById("reviewList");
 const searchInput = document.getElementById("searchInput");
+const sortSelect = document.getElementById("sortSelect");
 
 // レビューを入れておく配列
 let reviews = [];
@@ -28,13 +29,23 @@ function renderReviews() {
 
   const keyword = searchInput.value.toLowerCase();
 
-  const filteredReviews = reviews.filter(function (review) {
+  let filteredReviews = reviews.filter(function (review) {
     return (
       review.title.toLowerCase().includes(keyword) ||
       review.genre.toLowerCase().includes(keyword) ||
       review.comment.toLowerCase().includes(keyword)
     );
   });
+
+  if (sortSelect.value === "high") {
+    filteredReviews.sort(function (a, b) {
+      return b.rating - a.rating;
+    });
+  } else if (sortSelect.value === "low") {
+    filteredReviews.sort(function (a, b) {
+      return a.rating - b.rating;
+    });
+  }
 
   if (reviews.length === 0) {
     reviewList.innerHTML = '<p class="empty-message">まだレビューが登録されていません。</p>';
@@ -52,20 +63,19 @@ function renderReviews() {
 
     const index = reviews.indexOf(review);
 
-   reviewItem.innerHTML = `
-  <h3>${review.title}</h3>
-  <p class="review-date"><strong>登録日：</strong>${review.date || "登録日なし"}</p>
-  <p><strong>ジャンル：</strong>${review.genre}</p>
-  <p><strong>評価：</strong>${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}</p>
-  <p><strong>感想：</strong>${review.comment}</p>
-  <button class="edit-button" data-index="${index}">編集</button>
-  <button class="delete-button" data-index="${index}">削除</button>
-`;
+    reviewItem.innerHTML = `
+      <h3>${review.title}</h3>
+      <p class="review-date"><strong>登録日：</strong>${review.date || "登録日なし"}</p>
+      <p><strong>ジャンル：</strong>${review.genre}</p>
+      <p><strong>評価：</strong>${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}</p>
+      <p><strong>感想：</strong>${review.comment}</p>
+      <button class="edit-button" data-index="${index}">編集</button>
+      <button class="delete-button" data-index="${index}">削除</button>
+    `;
 
     reviewList.appendChild(reviewItem);
   });
 
-  // 編集ボタンに処理を付ける
   const editButtons = document.querySelectorAll(".edit-button");
 
   editButtons.forEach(function (button) {
@@ -89,14 +99,12 @@ function renderReviews() {
     });
   });
 
-  // 削除ボタンに処理を付ける
   const deleteButtons = document.querySelectorAll(".delete-button");
 
   deleteButtons.forEach(function (button) {
     button.addEventListener("click", function () {
       const index = Number(button.dataset.index);
 
-      // 編集中のレビューを削除した場合、編集モードを解除する
       if (editingIndex === index) {
         resetForm();
       }
@@ -179,6 +187,10 @@ cancelEditButton.addEventListener("click", function () {
 
 // 検索欄に文字が入力されたとき、一覧を更新する
 searchInput.addEventListener("input", function () {
+  renderReviews();
+});
+
+sortSelect.addEventListener("change", function () {
   renderReviews();
 });
 

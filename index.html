@@ -61,9 +61,18 @@
    <section class="list-area">
   <h2>登録したレビュー一覧</h2>
 
-  <div class="search-area">
-    <input type="text" id="searchInput" placeholder="作品名・ジャンル・感想で検索">
-  </div>
+  <d<div class="search-area">
+  <input type="text" id="searchInput" placeholder="作品名・ジャンル・感想で検索">
+</div>
+
+<div class="sort-area">
+  <label for="sortSelect">並び替え</label>
+  <select id="sortSelect">
+    <option value="default">登録順</option>
+    <option value="high">評価が高い順</option>
+    <option value="low">評価が低い順</option>
+  </select>
+</div>
 
   <div id="reviewList">
     <p class="empty-message">まだレビューが登録されていません。</p>
