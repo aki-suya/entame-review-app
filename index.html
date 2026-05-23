@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>エンタメ作品レビュー管理アプリ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+ <div class="header">
+  <p class="app-label">Entertainment Review Manager</p>
+  <h1>エンタメ作品レビュー管理アプリ</h1>
+  <p class="app-description">
+    映画・アニメ・漫画・ゲームなどのレビューを登録・保存・検索できるWebアプリです。
+  </p>
+</div>
+
+    <section class="form-area">
+      <h2>レビューを登録する</h2>
+
+      <div class="form-item">
+        <label for="title">作品名</label>
+        <input type="text" id="title" placeholder="例：君の名は。">
+      </div>
+
+      <div class="form-item">
+        <label for="genre">ジャンル</label>
+        <select id="genre">
+          <option value="">選択してください</option>
+          <option value="映画">映画</option>
+          <option value="アニメ">アニメ</option>
+          <option value="ドラマ">ドラマ</option>
+          <option value="漫画">漫画</option>
+          <option value="ゲーム">ゲーム</option>
+          <option value="音楽">音楽</option>
+          <option value="その他">その他</option>
+        </select>
+      </div>
+
+      <div class="form-item">
+        <label for="rating">評価</label>
+        <select id="rating">
+          <option value="">選択してください</option>
+          <option value="5">★★★★★ 5</option>
+          <option value="4">★★★★☆ 4</option>
+          <option value="3">★★★☆☆ 3</option>
+          <option value="2">★★☆☆☆ 2</option>
+          <option value="1">★☆☆☆☆ 1</option>
+        </select>
+      </div>
+
+      <div class="form-item">
+        <label for="comment">感想</label>
+        <textarea id="comment" placeholder="作品の感想を書いてください"></textarea>
+      </div>
+
+      <button id="addButton">登録する</button>
+    </section>
+
+   <section class="list-area">
+  <h2>登録したレビュー一覧</h2>
+
+  <div class="search-area">
+    <input type="text" id="searchInput" placeholder="作品名・ジャンル・感想で検索">
+  </div>
+
+  <div id="reviewList">
+    <p class="empty-message">まだレビューが登録されていません。</p>
+  </div>
+</section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
