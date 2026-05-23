@@ -52,14 +52,15 @@ function renderReviews() {
 
     const index = reviews.indexOf(review);
 
-    reviewItem.innerHTML = `
-      <h3>${review.title}</h3>
-      <p><strong>ジャンル：</strong>${review.genre}</p>
-      <p><strong>評価：</strong>${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}</p>
-      <p><strong>感想：</strong>${review.comment}</p>
-      <button class="edit-button" data-index="${index}">編集</button>
-      <button class="delete-button" data-index="${index}">削除</button>
-    `;
+   reviewItem.innerHTML = `
+  <h3>${review.title}</h3>
+  <p class="review-date"><strong>登録日：</strong>${review.date || "登録日なし"}</p>
+  <p><strong>ジャンル：</strong>${review.genre}</p>
+  <p><strong>評価：</strong>${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}</p>
+  <p><strong>感想：</strong>${review.comment}</p>
+  <button class="edit-button" data-index="${index}">編集</button>
+  <button class="delete-button" data-index="${index}">削除</button>
+`;
 
     reviewList.appendChild(reviewItem);
   });
@@ -147,20 +148,24 @@ addButton.addEventListener("click", function () {
     return;
   }
 
-  const reviewData = {
-    title: title,
-    genre: genre,
-    rating: Number(rating),
-    comment: comment
-  };
+const today = new Date();
 
-  if (editingIndex === -1) {
-    // 新規登録
-    reviews.push(reviewData);
-  } else {
-    // 編集保存
-    reviews[editingIndex] = reviewData;
-  }
+const reviewData = {
+  title: title,
+  genre: genre,
+  rating: Number(rating),
+  comment: comment,
+  date: `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`
+};
+
+if (editingIndex === -1) {
+  // 新規登録
+  reviews.push(reviewData);
+} else {
+  // 編集保存
+  reviewData.date = reviews[editingIndex].date || reviewData.date;
+  reviews[editingIndex] = reviewData;
+}
 
   saveReviews();
   renderReviews();

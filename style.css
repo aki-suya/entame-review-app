@@ -202,3 +202,7 @@ button:hover {
   background: #555;
   box-shadow: 0 6px 14px rgba(119, 119, 119, 0.25);
 }
+.review-date {
+  color: #666;
+  font-size: 14px;
+}
