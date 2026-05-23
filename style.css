@@ -182,3 +182,23 @@ button:hover {
     padding: 18px;
   }
 }
+.edit-button {
+  background: #2ecc71;
+  margin-top: 12px;
+  margin-right: 8px;
+}
+
+.edit-button:hover {
+  background: #27ae60;
+  box-shadow: 0 6px 14px rgba(46, 204, 113, 0.25);
+}
+
+.cancel-button {
+  background: #777;
+  margin-left: 8px;
+}
+
+.cancel-button:hover {
+  background: #555;
+  box-shadow: 0 6px 14px rgba(119, 119, 119, 0.25);
+}

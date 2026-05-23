@@ -4,11 +4,16 @@ const genreInput = document.getElementById("genre");
 const ratingInput = document.getElementById("rating");
 const commentInput = document.getElementById("comment");
 const addButton = document.getElementById("addButton");
+const cancelEditButton = document.getElementById("cancelEditButton");
 const reviewList = document.getElementById("reviewList");
 const searchInput = document.getElementById("searchInput");
 
 // レビューを入れておく配列
 let reviews = [];
+
+// 編集中のレビュー番号を入れておく変数
+// -1 のときは「新規登録モード」
+let editingIndex = -1;
 
 // ページを開いたときに、保存済みのレビューを読み込む
 const savedReviews = localStorage.getItem("reviews");
@@ -45,32 +50,79 @@ function renderReviews() {
     const reviewItem = document.createElement("div");
     reviewItem.classList.add("review-item");
 
+    const index = reviews.indexOf(review);
+
     reviewItem.innerHTML = `
       <h3>${review.title}</h3>
       <p><strong>ジャンル：</strong>${review.genre}</p>
       <p><strong>評価：</strong>${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}</p>
       <p><strong>感想：</strong>${review.comment}</p>
-      <button class="delete-button">削除</button>
+      <button class="edit-button" data-index="${index}">編集</button>
+      <button class="delete-button" data-index="${index}">削除</button>
     `;
 
-    const deleteButton = reviewItem.querySelector(".delete-button");
+    reviewList.appendChild(reviewItem);
+  });
 
-    deleteButton.addEventListener("click", function () {
-      const index = reviews.indexOf(review);
+  // 編集ボタンに処理を付ける
+  const editButtons = document.querySelectorAll(".edit-button");
+
+  editButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      const index = Number(button.dataset.index);
+      const review = reviews[index];
+
+      titleInput.value = review.title;
+      genreInput.value = review.genre;
+      ratingInput.value = review.rating;
+      commentInput.value = review.comment;
+
+      editingIndex = index;
+      addButton.textContent = "編集内容を保存する";
+      cancelEditButton.style.display = "inline-block";
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  });
+
+  // 削除ボタンに処理を付ける
+  const deleteButtons = document.querySelectorAll(".delete-button");
+
+  deleteButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      const index = Number(button.dataset.index);
+
+      // 編集中のレビューを削除した場合、編集モードを解除する
+      if (editingIndex === index) {
+        resetForm();
+      }
 
       reviews.splice(index, 1);
 
       saveReviews();
       renderReviews();
     });
-
-    reviewList.appendChild(reviewItem);
   });
 }
 
 // レビューを保存する関数
 function saveReviews() {
   localStorage.setItem("reviews", JSON.stringify(reviews));
+}
+
+// 入力欄を初期状態に戻す関数
+function resetForm() {
+  titleInput.value = "";
+  genreInput.value = "";
+  ratingInput.value = "";
+  commentInput.value = "";
+
+  editingIndex = -1;
+  addButton.textContent = "登録する";
+  cancelEditButton.style.display = "none";
 }
 
 // 登録ボタンがクリックされたときの処理
@@ -95,28 +147,38 @@ addButton.addEventListener("click", function () {
     return;
   }
 
-  const newReview = {
+  const reviewData = {
     title: title,
     genre: genre,
     rating: Number(rating),
     comment: comment
   };
 
-  reviews.push(newReview);
+  if (editingIndex === -1) {
+    // 新規登録
+    reviews.push(reviewData);
+  } else {
+    // 編集保存
+    reviews[editingIndex] = reviewData;
+  }
 
   saveReviews();
   renderReviews();
+  resetForm();
+});
 
-  titleInput.value = "";
-  genreInput.value = "";
-  ratingInput.value = "";
-  commentInput.value = "";
+// 編集キャンセルボタンがクリックされたときの処理
+cancelEditButton.addEventListener("click", function () {
+  resetForm();
 });
 
 // 検索欄に文字が入力されたとき、一覧を更新する
 searchInput.addEventListener("input", function () {
   renderReviews();
 });
+
+// 最初は編集キャンセルボタンを非表示にする
+cancelEditButton.style.display = "none";
 
 // ページを開いたときにレビュー一覧を表示する
 renderReviews();
