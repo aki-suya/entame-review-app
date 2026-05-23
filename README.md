@@ -34,6 +34,8 @@ https://aki-suya.github.io/entame-review-app/
 - レビュー削除
 - 作品名・ジャンル・感想による検索
 - localStorageによるデータ保存
+- レビュー編集
+- 編集キャンセル
 
 ## 工夫した点
 
